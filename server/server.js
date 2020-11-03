@@ -14,7 +14,9 @@ app.use(express.static('public'));
 //Import to use routes
 app.use(require('./routes/index'));
 
-const connect = require('./db/connection')
+const db = require('./db/connection');
+
+
 
 app.listen(3000, () => {
     console.log("Escuchando puerto 3000");
