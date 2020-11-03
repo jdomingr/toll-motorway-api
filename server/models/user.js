@@ -42,5 +42,17 @@ const userSchema = new Schema({
 
 });
 
+//Here, I cannot use arrow function
+userSchema.methods.getPublicFields = function(){
+    
+    return {
+        name: this.name,
+        last_name: this.last_name,
+        email: this.email 
+    }
+}
+
+
+
 module.exports = mongoose.model('User', userSchema);
 

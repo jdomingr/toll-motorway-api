@@ -55,6 +55,7 @@ app.get('/users/:id', (req, res) => {
                 });
         }
 
+       
         res.json({
             data: userDB,
             error: null
@@ -94,20 +95,79 @@ app.post('/users', (req, res) => {
                 });
         }
 
+        //Returns only public fields
+        userDB = user.getPublicFields();
+
         res.json({
             data: userDB,
-            err: null
+            error: null
         });
 
 
     });
 });
 
-app.put('/users', (req, res) => {
+app.put('/users/:id', (req, res) => {
+
+    const id = req.params.id;
+    const body = req.body;
+
+    User.findByIdAndUpdate(id, body, {new: true, runValidators: true}, (err, userDB) => {
+
+        if(err){
+            return res.status(500)
+                .json({
+                    data: null,
+                    error: err
+                });
+        }
+
+        if(!userDB){
+            return res.status(400)
+                .json({
+                    data: null,
+                    error: 'User not found'
+                });
+        }
+
+        res.json({
+            data: userDB,
+            error: null
+        });
+
+    });
 
 });
 
-app.delete('/users', (req, res) => {
+app.delete('/users/:id', (req, res) => {
+
+    const id = req.params.id;
+    const body = { status: false};
+
+    User.findByIdAndUpdate(id, body, {new: true, runValidators: true}, (err, userDB) => {
+
+        if(err){
+            return res.status(500)
+                .json({
+                    data: null,
+                    error: err
+                });
+        }
+
+        if(!userDB){
+            return res.status(400)
+                .json({
+                    data: null,
+                    error: 'User not found'
+                });
+        }
+
+        res.json({
+            data: userDB,
+            error: null
+        });
+
+    });
 
 });
 
