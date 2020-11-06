@@ -5,6 +5,12 @@ process.env.PORT = process.env.PORT || 3000;
 //Environment
 process.env.ENV = process.env.ENV || 'dev';
 
+//Token expiration time
+process.env.TOKEN_EXPIRATION_TIME = '48h';
+
+//Auth seed
+process.env.AUTH_SEED = process.env.AUTH_SEED || 'Development seed';
+
 
 //DB
 let urlDB;
