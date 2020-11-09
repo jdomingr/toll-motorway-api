@@ -2,10 +2,11 @@ const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
+const { verifyToken } = require('../middlewares/auth');
 
 
 
-app.get('/users', (req, res) => {
+app.get('/users', verifyToken, (req, res) => {
     //By default return true and false states
     /**
      * First param filter 
@@ -34,7 +35,7 @@ app.get('/users', (req, res) => {
 
 });
 
-app.get('/users/:id', (req, res) => {
+app.get('/users/:id', verifyToken,  (req, res) => {
     const id = req.params.id;
 
     User.findById(id, (err, userDB) => {
@@ -66,7 +67,7 @@ app.get('/users/:id', (req, res) => {
 
 });
 
-app.post('/users', (req, res) => {
+app.post('/users', verifyToken, (req, res) => {
     let body = req.body;
 
     const user = new User({
@@ -107,7 +108,7 @@ app.post('/users', (req, res) => {
     });
 });
 
-app.put('/users/:id', (req, res) => {
+app.put('/users/:id', verifyToken, (req, res) => {
 
     const id = req.params.id;
     const body = req.body;
@@ -139,7 +140,7 @@ app.put('/users/:id', (req, res) => {
 
 });
 
-app.delete('/users/:id', (req, res) => {
+app.delete('/users/:id', verifyToken, (req, res) => {
 
     const id = req.params.id;
     const body = { status: false};
