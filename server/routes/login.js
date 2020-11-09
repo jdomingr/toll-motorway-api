@@ -40,11 +40,11 @@ app.post('/login', (req, res) => {
             
         }
 
-        
         const userData = new User({
             name: userDB.name,
             last_name: userDB.last_name,
             email: userDB.email,
+            role: userDB.role
         });
         
         userDB = userData.getPublicFields();

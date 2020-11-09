@@ -3,10 +3,11 @@ const app = express();
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const { verifyToken } = require('../middlewares/auth');
+const { isAdmin } = require('../middlewares/admin');
 
 
 
-app.get('/users', verifyToken, (req, res) => {
+app.get('/users', [verifyToken, isAdmin], (req, res) => {
     //By default return true and false states
     /**
      * First param filter 
@@ -35,7 +36,7 @@ app.get('/users', verifyToken, (req, res) => {
 
 });
 
-app.get('/users/:id', verifyToken,  (req, res) => {
+app.get('/users/:id', [verifyToken, isAdmin],  (req, res) => {
     const id = req.params.id;
 
     User.findById(id, (err, userDB) => {
@@ -67,7 +68,7 @@ app.get('/users/:id', verifyToken,  (req, res) => {
 
 });
 
-app.post('/users', verifyToken, (req, res) => {
+app.post('/users', [verifyToken, isAdmin], (req, res) => {
     let body = req.body;
 
     const user = new User({
@@ -108,7 +109,7 @@ app.post('/users', verifyToken, (req, res) => {
     });
 });
 
-app.put('/users/:id', verifyToken, (req, res) => {
+app.put('/users/:id', [verifyToken, isAdmin], (req, res) => {
 
     const id = req.params.id;
     const body = req.body;
@@ -140,7 +141,7 @@ app.put('/users/:id', verifyToken, (req, res) => {
 
 });
 
-app.delete('/users/:id', verifyToken, (req, res) => {
+app.delete('/users/:id', [verifyToken, isAdmin], (req, res) => {
 
     const id = req.params.id;
     const body = { status: false};
