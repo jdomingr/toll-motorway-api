@@ -160,6 +160,4 @@ app.delete('/states/:id', [verifyToken, isAdmin],  (req, res) => {
 });
 
 
-
-
 module.exports = app;
