@@ -4,12 +4,11 @@ const { verifyToken } = require('../middlewares/auth');
 
 const app = express();
 
-const City = require('../models/city');
+const Vehicle = require('../models/vehicle');
 
+app.get('/vehicles', verifyToken, ( req, res ) => {
 
-app.get('/cities', verifyToken, ( req, res ) => {
-
-    City.find( (err, cities) => {
+    Vehicle.find( (err, vehicles) => {
 
         if(err){
             return res.status(500)
@@ -20,7 +19,7 @@ app.get('/cities', verifyToken, ( req, res ) => {
         }   
 
         res.json({
-            data: cities,
+            data: vehicles,
             error: null
         });
 
@@ -28,11 +27,11 @@ app.get('/cities', verifyToken, ( req, res ) => {
 
 });
 
-app.get('/cities/:id', verifyToken, ( req, res ) => {
+app.get('/vehicles/:id', verifyToken, ( req, res ) => {
 
     const id = req.params.id;
 
-    City.findById(id, (err, cityDB) => {
+    Vehicle.findById(id, (err, vehicleDB) => {
 
         if(err){
             return res.status(500)
@@ -42,16 +41,16 @@ app.get('/cities/:id', verifyToken, ( req, res ) => {
                 });
         }   
 
-        if(!cityDB){
+        if(!vehicleDB){
             return res.status(400)
                 .json({
                     data: null,
-                    error: 'City not found'
+                    error: 'Vehicle not found'
                 });
         }
 
         res.json({
-            data: cityDB,
+            data: vehicleDB,
             error: null
         });
 
@@ -60,17 +59,16 @@ app.get('/cities/:id', verifyToken, ( req, res ) => {
 
 });
 
-app.post('/cities', [verifyToken, isAdmin], ( req, res ) => {
+app.post('/vehicles', [verifyToken, isAdmin], ( req, res ) => {
 
     let body = req.body;
 
-    let city = new City({
-        name: body.name,
-        code: body.code,
-        state: body.state,
+    let vehicle = new Vehicle({
+        type: body.type,
+        amount: body.amount
     });
 
-    city.save(( err, cityDB ) => {
+    vehicle.save(( err, vehicleDB ) => {
 
         if(err){
             return res.status(500)
@@ -80,28 +78,28 @@ app.post('/cities', [verifyToken, isAdmin], ( req, res ) => {
                 });
         }
 
-        if(!cityDB){
+        if(!vehicleDB){
             return res.status(400)
                 .json({
                     data: null,
-                    error: 'City couldnt be saved'
+                    error: 'Vehicle couldnt be saved'
                 });
         }
 
         res.json({
-            data: cityDB,
+            data: vehicleDB,
             error: null
         });
     });
 
 });
 
-app.put('/cities/:id', [verifyToken, isAdmin], (req, res) => {
+app.put('/vehicles/:id', [verifyToken, isAdmin], (req, res) => {
 
     const id = req.params.id;
     const body = req.body;
 
-    City.findOneAndUpdate(id, body, {new: true, runValidators: true}, (err, cityDB) => {
+    Vehicle.findOneAndUpdate(id, body, {new: true, runValidators: true}, (err, vehicleDB) => {
 
         if(err){
             return res.status(500)
@@ -111,16 +109,16 @@ app.put('/cities/:id', [verifyToken, isAdmin], (req, res) => {
                 });
         }
 
-        if(!cityDB){
+        if(!vehicleDB){
             return res.status(400)
                 .json({
                     data: null,
-                    error: 'City not found'
+                    error: 'Vehicle not found'
                 });
         }
 
         res.json({
-            data: cityDB,
+            data: vehicleDB,
             error: null
         });
 
@@ -128,11 +126,14 @@ app.put('/cities/:id', [verifyToken, isAdmin], (req, res) => {
 
 });
 
-app.delete('/cities/:id', [verifyToken, isAdmin],  (req, res) => {
+app.delete('/vehicles/:id', [verifyToken, isAdmin], (req, res) => {
 
     const id = req.params.id;
+    const body = {
+        status: false
+    }
 
-    City.findByIdAndDelete(id, (err, cityDB) => {
+    Vehicle.findOneAndUpdate(id, body, {new: true, runValidators: true}, (err, vehicleDB) => {
 
         if(err){
             return res.status(500)
@@ -142,21 +143,20 @@ app.delete('/cities/:id', [verifyToken, isAdmin],  (req, res) => {
                 });
         }
 
-        if(!cityDB){
+        if(!vehicleDB){
             return res.status(400)
                 .json({
                     data: null,
-                    error: 'City not found'
+                    error: 'Vehicle not found'
                 });
         }
 
         res.json({
-            data: cityDB,
+            data: vehicleDB,
             error: null
         });
 
     });
-    
 
 });
 

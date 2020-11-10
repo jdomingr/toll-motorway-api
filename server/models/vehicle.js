@@ -9,13 +9,16 @@ const validVehicles = {
 const vehicleSchema = Schema({
     type: {
         type: String,
-
-        required: true
+        required: [true, 'Vehicle type is required']
     },
     amount: {
         type: Number,
         required: true,
         enum: validVehicles
+    },
+    status: {
+        type: Boolean,
+        default: true
     }
 });
 
