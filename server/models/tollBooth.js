@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const TollBothSchema = new Schema({
+const TollBoothSchema = new Schema({
 
     name: {
         type: String,
@@ -27,4 +27,4 @@ const TollBothSchema = new Schema({
 
 });
 
-module.exports = mongoose.model('TollBoth', TollBothSchema);
+module.exports = mongoose.model('TollBooth', TollBoothSchema);

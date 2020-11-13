@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const passThroughBoth = new Schema({
+const payLog = new Schema({
 
     date: {
         type: Date,
@@ -15,18 +15,23 @@ const passThroughBoth = new Schema({
         required: [true, 'User is required']
     },
 
-    toll_both: {
+    toll_booth: {
         type: Schema.Types.ObjectId,
-        ref: 'TollBoth',
-        required: [true, 'Toll Both is required']
+        ref: 'TollBooth',
+        required: [true, 'Toll Booth is required']
     },
 
     vehicle: {
         type: Schema.Types.ObjectId,
         ref: 'Vehicle',
         required: [true, 'Vehicle is required']
+    },
+
+    status: {
+        type: Boolean,
+        default: true
     }
 
 });
 
-module.exports = mongoose.model('PassThroughBoth', passThroughBoth);
+module.exports = mongoose.model('PayLog', payLog);
