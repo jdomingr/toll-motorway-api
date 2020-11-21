@@ -1,8 +1,8 @@
 require('./config/config');
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors')
 const app = express();
-
 
 //Middlewares
 app.use(bodyParser.urlencoded( {extended: false} ));
@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 //Import to use routes
+app.use(cors());
 app.use(require('./routes/index'));
 
 const db = require('./db/connection');
