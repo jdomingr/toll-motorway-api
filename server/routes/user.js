@@ -17,19 +17,21 @@ app.get('/users', [verifyToken, isAdmin], (req, res) => {
      */
 
 
-    User.find({}, 'name last_name email role', (err, users) => {
+    User.find({}, '_id, name last_name email role status', (err, users) => {
 
         if(err){
             return res.status(500)
                 .json({
                     data: null,
-                    error: err
+                    error: err,
+                    success: false
                 });
         }
 
         res.json({
             data: users,
-            error: null
+            error: null,
+            success: true
         });
 
     });
@@ -45,7 +47,8 @@ app.get('/users/:id', [verifyToken, isAdmin],  (req, res) => {
             return res.status(500)
                 .json({
                 data: null,
-                error: err
+                error: err,
+                success: false
             });
         }
 
@@ -53,14 +56,16 @@ app.get('/users/:id', [verifyToken, isAdmin],  (req, res) => {
             return res.status(400)
                 .json({
                     data: null,
-                    error: 'User not found'
+                    error: 'User not found',
+                    success: false
                 });
         }
 
        
         res.json({
             data: userDB,
-            error: null
+            error: null,
+            success: true
         });
 
     });
@@ -70,7 +75,6 @@ app.get('/users/:id', [verifyToken, isAdmin],  (req, res) => {
 
 app.post('/users', [verifyToken, isAdmin], (req, res) => {
     let body = req.body;
-
     const user = new User({
         name: body.name,
         last_name: body.last_name,
@@ -82,10 +86,16 @@ app.post('/users', [verifyToken, isAdmin], (req, res) => {
     user.save( (err, userDB) => {
 
         if(err) {
+            let error = {};
+            Object.keys(err.errors).forEach( (key) => {
+                error[key] = err.errors[key].message;
+            });
+
             return res.status(400)
                 .json({
                     data: null,
-                    error: err
+                    error: error,
+                    success: false
                 });
         }
 
@@ -93,7 +103,8 @@ app.post('/users', [verifyToken, isAdmin], (req, res) => {
             return res.status(500)
                 .json({
                     data: null,
-                    error: 'User could not be saved'
+                    error: 'User could not be saved',
+                    success: false
                 });
         }
 
@@ -102,7 +113,8 @@ app.post('/users', [verifyToken, isAdmin], (req, res) => {
 
         res.json({
             data: userDB,
-            error: null
+            error: null,
+            success: true
         });
 
 
@@ -120,7 +132,8 @@ app.put('/users/:id', [verifyToken, isAdmin], (req, res) => {
             return res.status(500)
                 .json({
                     data: null,
-                    error: err
+                    error: err,
+                    success: false
                 });
         }
 
@@ -128,13 +141,15 @@ app.put('/users/:id', [verifyToken, isAdmin], (req, res) => {
             return res.status(400)
                 .json({
                     data: null,
-                    error: 'User not found'
+                    error: 'User not found',
+                    success: false
                 });
         }
 
         res.json({
             data: userDB,
-            error: null
+            error: null,
+            success: true
         });
 
     });
@@ -152,7 +167,8 @@ app.delete('/users/:id', [verifyToken, isAdmin], (req, res) => {
             return res.status(500)
                 .json({
                     data: null,
-                    error: err
+                    error: err,
+                    success: false
                 });
         }
 
@@ -160,13 +176,15 @@ app.delete('/users/:id', [verifyToken, isAdmin], (req, res) => {
             return res.status(400)
                 .json({
                     data: null,
-                    error: 'User not found'
+                    error: 'User not found',
+                    success: false
                 });
         }
 
         res.json({
             data: userDB,
-            error: null
+            error: null,
+            success: true
         });
 
     });

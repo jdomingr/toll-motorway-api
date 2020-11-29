@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
+const validator = require('validator');
 
 
 const Schema = mongoose.Schema;
@@ -26,7 +28,12 @@ const userSchema = new Schema({
     email: {
         type: String,
         required: [true, 'Password is required'],
-        unique: true
+        unique: true,
+        validate(value){
+            if(!validator.isEmail(value)){
+                throw new Error('Email not valid')
+            }
+        }
     },
     status: {
         type: Boolean,
@@ -42,6 +49,8 @@ const userSchema = new Schema({
 
 });
 
+userSchema.plugin(uniqueValidator, {message: '{PATH} already registered'});
+
 //Here, I cannot use arrow function
 userSchema.methods.getPublicFields = function(){
     
@@ -49,7 +58,8 @@ userSchema.methods.getPublicFields = function(){
         name: this.name,
         last_name: this.last_name,
         email: this.email,
-        role: this.role
+        role: this.role,
+      
     }
 }
 

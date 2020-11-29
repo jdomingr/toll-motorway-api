@@ -5,7 +5,7 @@ const cors = require('cors')
 const app = express();
 
 //Middlewares
-app.use(bodyParser.urlencoded( {extended: false} ));
+app.use(bodyParser.urlencoded( {extended: true} ));
 //parsear a json y que solo el content-type haga match
 app.use(bodyParser.json());
 //In public I will have static files

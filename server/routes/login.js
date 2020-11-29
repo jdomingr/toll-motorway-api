@@ -17,25 +17,26 @@ app.post('/login', (req, res) => {
             return res.status(500) 
                 .json({
                     data: null,
-                    error: err
+                    error: err,
+                    succes: false
                 });
         }
 
         if(!userDB){
-            return res.status(400) 
-                .json({
+            return res.json({
                     data: null,
-                    error: 'Credentials not valid'
+                    error: 'Credentials not valid',
+                    success: false
                 });
         }
 
         //If userDB exist, I will compare the password
         if(!bcrypt.compareSync(body.password, userDB.password)){
            
-                return res.status(400) 
-                    .json({
+                return res.json({
                         data: null,
-                        error: 'Credentials not valid'
+                        error: 'Credentials not valid',
+                        success: false
                     });
             
         }
@@ -55,7 +56,8 @@ app.post('/login', (req, res) => {
 
         res.json({
             user: userDB,
-            token
+            token,
+            success: true
         });
 
     });
