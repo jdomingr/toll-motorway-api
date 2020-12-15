@@ -10,7 +10,8 @@ const verifyToken =  (req, res, next) => {
             return res.status(400)
                 .json({
                     data: null,
-                    error: 'Invalid token'
+                    error: 'Invalid token',
+                    status: false
                 });
         }
         //decoded may contain info due payload

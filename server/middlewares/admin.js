@@ -8,7 +8,8 @@ const isAdmin = (req, res, next) => {
         return res.status(401)
             .json({
                 data: null, 
-                error: 'Unauthorized, you cant access to this resource'
+                error: 'Unauthorized, you cant access to this resource',
+                status: false
             });
     }
 

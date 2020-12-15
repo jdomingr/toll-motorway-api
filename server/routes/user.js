@@ -4,20 +4,24 @@ const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const { verifyToken } = require('../middlewares/auth');
 const { isAdmin } = require('../middlewares/admin');
+const { formatErrors } = require('../helpers/formatError');
 
 
 
 app.get('/users', [verifyToken, isAdmin], (req, res) => {
     //By default return true and false states
+    let limit = Number(req.query.limit) || 7;
+    let from = Number(req.query.from) || 0; //Also parseInt should work
     /**
      * First param filter 
      * Second param fields to return
      * Third param object optional
      * Fourth is callback
      */
-
-
-    User.find({}, '_id, name last_name email role status', (err, users) => {
+    User.find({}, '_id, name last_name email role status')
+        .skip(from)
+        .limit(limit)
+        .exec((err, users) => {
 
         if(err){
             return res.status(500)
@@ -28,12 +32,16 @@ app.get('/users', [verifyToken, isAdmin], (req, res) => {
                 });
         }
 
-        res.json({
-            data: users,
-            error: null,
-            success: true
-        });
+        User.countDocuments({}, (err, count) => {
 
+            res.json({
+                success: true,
+                data: users,
+                count,
+                error: null,
+            });
+
+        });
     });
 
 });
@@ -86,15 +94,13 @@ app.post('/users', [verifyToken, isAdmin], (req, res) => {
     user.save( (err, userDB) => {
 
         if(err) {
-            let error = {};
-            Object.keys(err.errors).forEach( (key) => {
-                error[key] = err.errors[key].message;
-            });
-
+            
+            const formatedErrors = formatErrors(err);
+            
             return res.status(400)
                 .json({
                     data: null,
-                    error: error,
+                    error: formatedErrors,
                     success: false
                 });
         }
