@@ -1,7 +1,7 @@
 const express = require('express');
 const { isAdmin } = require('../middlewares/admin');
 const { verifyToken } = require('../middlewares/auth');
-
+const { formatErrors } = require('../helpers/formatError');
 const app = express();
 
 const Vehicle = require('../models/vehicle');
